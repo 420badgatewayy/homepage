@@ -1,6 +1,9 @@
-import { h, app } from "hyperapp";
-import { state  } from "./states";
-import { actions  } from "./actions";
-import { view  } from "./views";
+import initialize from 'utils/initializeThree';
 
-app(state, actions, view, document.querySelector('#container'));
+const {
+  scene,
+  camera,
+  renderer
+} = initialize('#container');
+
+renderer.render(scene, camera);
