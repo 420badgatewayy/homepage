@@ -33,7 +33,10 @@ module.exports = {
           options: {
             presets: ["env"],
             plugins: [
-							"transform-object-rest-spread",
+              "transform-object-rest-spread",
+              [ "transform-react-jsx", {
+                pragma: "h"
+              }]
             ]
           }
         }
@@ -46,7 +49,8 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
-			THREE: 'three',
+      h: ['hyperapp', 'h'],
+      THREE: 'three',
 		}),
 	],
   devtool: "source-map",

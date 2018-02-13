@@ -1,21 +1,44 @@
-import resize from 'utils/resize';
+import sizeToFit from 'utils/sizeToFit';
+import aspect from "constants/aspect";
+const aspectRatio = aspect.x / aspect.y;
 
-export default selector => {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, 16 / 9, 0.1, 1000);
+export default (selector, options={}) => {
+  const domElement = document.querySelector(selector);
   const renderer = new THREE.WebGLRenderer({antialias: true});
-  
-  camera.position.z = 4;
-  renderer.setClearColor('#ffffff');
-  renderer.setSize(window.innerWidth, 9 / 16 * window.innerWidth);
-  
-  document.querySelector(selector).appendChild(renderer.domElement);
-  window.addEventListener('resize', () => resize(renderer));
-  resize(renderer);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    options.fov || 75, 
+    options.cameraAspect || aspectRatio, 
+    0.1, 
+    1000
+  );
+
+  renderer.setClearColor(options.clearColor || '#ffffff');
+  camera.position = options.cameraPosition || new THREE.Vector3(0,0,4);
+
+  const _setRenderSize = () => {
+    const {offsetWidth, offsetHeight} = domElement;
+    const {x, y} = sizeToFit(aspectRatio, offsetWidth, offsetHeight);
+    renderer.setSize(x,y);
+  };
+
+  const attachScene = () => {
+    window.addEventListener('resize', _setRenderSize);
+    _setRenderSize();
+    return domElement.appendChild(renderer.domElement);
+  }
+
+  const detachScene = () => {
+    window.removeEventListener('resize', _setRenderSize);
+    return domElement.removeChild(renderer.domElement);
+  }
 
   return {
     scene,
     camera,
-    renderer
+    renderer,
+    attachScene,
+    detachScene,
   };
+  
 }
