@@ -1,15 +1,13 @@
 import style from "./style.css";
-import initializeThree from "utils/initialize-three";
 
-const onCreate = (el) => {
+const onCreate = (el, three) => {
   const {
     scene,
     camera,
     renderer,
-    attachScene,
-    detachScene,
-  } = initializeThree();
-  attachScene(el);
+    toolbelt,
+  } = three;
+  toolbelt.attachScene(el);
   const geometry = new THREE.BoxGeometry(1,1,1)
   const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
   const cube = new THREE.Mesh( geometry, material );
@@ -23,11 +21,11 @@ const onCreate = (el) => {
   render();
 };
 
-export const Cube = ({state, actions}) => {
+export const Cube = ({state, actions, three}) => {
   return(
     <div key="cube" 
       className={style.scene} 
-      oncreate={onCreate}
+      oncreate={el => onCreate(el, three)}
     />
   )
 };

@@ -13,28 +13,34 @@ export default (options={}) => {
   );
 
   renderer.setClearColor(options.clearColor || '#bbffff');
-  camera.position.x = options.cameraPosition ? options.cameraPosition.x : 0;
-  camera.position.y = options.cameraPosition ? options.cameraPosition.y : 0;
-  camera.position.z = options.cameraPosition ? options.cameraPosition.z : 4;
+  camera.position.set(
+    options.cameraPosition ? options.cameraPosition.x : 0,
+    options.cameraPosition ? options.cameraPosition.y : 0,
+    options.cameraPosition ? options.cameraPosition.z : 4,
+  );
 
-  const attachScene = (domElement) => {
+  const attachScene = domElement => {
     window.addEventListener('resize', _setRenderSize);
+    domElement.appendChild(renderer.domElement);
     renderer.domParent = domElement;
     _setRenderSize();
-    return renderer.domParent.appendChild(renderer.domElement);
-  }
+  };
 
-  const detachScene = (domElement) => {
+  const detachScene = domElement => {
     window.removeEventListener('resize', _setRenderSize);
-    return renderer.domParent.removeChild(renderer.domElement);
-  }
+    renderer.domParent.removeChild(renderer.domElement);
+  };
+
+  const toolbelt = {
+    attachScene,
+    detachScene
+  };
 
   return {
     scene,
     camera,
     renderer,
-    attachScene,
-    detachScene,
+    toolbelt,
   };
   
   function _setRenderSize() {
