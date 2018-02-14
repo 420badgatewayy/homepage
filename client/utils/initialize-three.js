@@ -2,7 +2,7 @@ import sizeToFit from 'utils/size-to-fit';
 import aspect from "constants/aspect";
 const aspectRatio = aspect.x / aspect.y;
 
-export default (domElement, options={}) => {
+export default (options={}) => {
   const renderer = new THREE.WebGLRenderer({antialias: true});
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -12,24 +12,21 @@ export default (domElement, options={}) => {
     1000
   );
 
-  renderer.setClearColor(options.clearColor || '#ffffff');
-  camera.position.set(options.cameraPosition || new THREE.Vector3(0,0,4));
+  renderer.setClearColor(options.clearColor || '#bbffff');
+  camera.position.x = options.cameraPosition ? options.cameraPosition.x : 0;
+  camera.position.y = options.cameraPosition ? options.cameraPosition.y : 0;
+  camera.position.z = options.cameraPosition ? options.cameraPosition.z : 4;
 
-  const _setRenderSize = () => {
-    const {offsetWidth, offsetHeight} = domElement;
-    const {x, y} = sizeToFit(aspectRatio, offsetWidth, offsetHeight);
-    renderer.setSize(x,y);
-  };
-
-  const attachScene = () => {
+  const attachScene = (domElement) => {
     window.addEventListener('resize', _setRenderSize);
+    renderer.domParent = domElement;
     _setRenderSize();
-    return domElement.appendChild(renderer.domElement);
+    return renderer.domParent.appendChild(renderer.domElement);
   }
 
-  const detachScene = () => {
+  const detachScene = (domElement) => {
     window.removeEventListener('resize', _setRenderSize);
-    return domElement.removeChild(renderer.domElement);
+    return renderer.domParent.removeChild(renderer.domElement);
   }
 
   return {
@@ -40,4 +37,10 @@ export default (domElement, options={}) => {
     detachScene,
   };
   
+  function _setRenderSize() {
+    const {offsetWidth, offsetHeight} = renderer.domParent;
+    const {x, y} = sizeToFit(aspectRatio, offsetWidth, offsetHeight);
+    renderer.setSize(x,y);
+  };
+
 }

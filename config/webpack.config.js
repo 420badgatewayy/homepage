@@ -51,7 +51,7 @@ module.exports = {
 		new webpack.ProvidePlugin({
       h: ['hyperapp', 'h'],
       THREE: 'three',
-		}),
+    }),
 	],
   devtool: "source-map",
   watch: true
