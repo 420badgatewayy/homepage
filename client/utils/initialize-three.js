@@ -1,9 +1,8 @@
-import sizeToFit from 'utils/sizeToFit';
+import sizeToFit from 'utils/size-to-fit';
 import aspect from "constants/aspect";
 const aspectRatio = aspect.x / aspect.y;
 
-export default (selector, options={}) => {
-  const domElement = document.querySelector(selector);
+export default (domElement, options={}) => {
   const renderer = new THREE.WebGLRenderer({antialias: true});
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -14,7 +13,7 @@ export default (selector, options={}) => {
   );
 
   renderer.setClearColor(options.clearColor || '#ffffff');
-  camera.position = options.cameraPosition || new THREE.Vector3(0,0,4);
+  camera.position.set(options.cameraPosition || new THREE.Vector3(0,0,4));
 
   const _setRenderSize = () => {
     const {offsetWidth, offsetHeight} = domElement;
