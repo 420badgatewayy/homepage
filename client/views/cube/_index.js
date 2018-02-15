@@ -1,6 +1,8 @@
 import style from "./style.css";
+import { setTimeout } from "timers";
+// import cube_socket from "sockets/cube";
 
-const onCreate = (el, three) => {
+const onCreate = (el, state, actions, three, socket) => {
   const {
     scene,
     camera,
@@ -19,13 +21,17 @@ const onCreate = (el, three) => {
     requestAnimationFrame(render);
   }
   render();
+  socket.open('/cube')
+  socket.on('connection', ()=> console.log('socket connected'));
 };
 
-export const Cube = ({state, actions, three}) => {
+export const Cube = ({state, actions, three, socket}) => {
+  setTimeout(actions.$next_stage, 1000)
   return(
     <div key="cube" 
       className={style.scene} 
-      oncreate={el => onCreate(el, three)}
+      oncreate={el => onCreate(el, state, actions, three, socket)}
+      ondestroy={()=> socket.close()}
     />
   )
 };

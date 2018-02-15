@@ -1,28 +1,13 @@
-import selector from "utils/selector";
-import initialize_scene from "utils/initialize-three";
+import io from 'socket.io-client';
+import initialize_three from "game/initialize-three";
+import get_socket from "sockets";
+import router from "./routes";
 
-import { Cube } from "./cube";
-
-const select = (obj, ...paths) => {
-  const selected = selector(obj, ...paths);
-  return {...obj.global, ...selected};
-};
-
-const switchView = (state, actions, three
-) => {
-  switch(state.global.$stage) {
-    case 0: return <Cube
-      state={select(state)}
-      actions={select(actions)}
-      three={three}
-      />
-  }
-};
-
-const three = initialize_scene();
+const three = initialize_three();
+const socket = get_socket();
 
 export const view = (state, actions) => (
   <div key="app" id="__app">
-    {switchView(state, actions, three)}
+    {router(state, actions, three, socket)}
   </div>
 );

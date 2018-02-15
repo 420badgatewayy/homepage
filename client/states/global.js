@@ -1,3 +1,3 @@
-export const global = {
+export default {
   $stage: 0,
 }
