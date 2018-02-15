@@ -1,3 +1,3 @@
 export default {
-  $stage: 0,
+  _stage: 0,
 }

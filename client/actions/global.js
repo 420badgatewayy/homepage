@@ -1,3 +1,3 @@
 export default {
-  $next_stage: () => state => ({$stage: state.$stage +1}),
+  _next_stage: () => state => ({$stage: state.$stage +1}),
 }

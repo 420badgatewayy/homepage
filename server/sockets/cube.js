@@ -1,6 +1,10 @@
 const onClientConnect = client => {
   console.log('client connected');
   client.emit('connection')
+
+
+  
+  client.on('disconnect', onClientDisconnect);
 }
 
 const onClientDisconnect = client => {
@@ -9,6 +13,4 @@ const onClientDisconnect = client => {
 
 module.exports = function(path, io) {
   io.of(path).on('connection', onClientConnect);
-  io.of(path).on('disconnect', onClientDisconnect);
-  
 }

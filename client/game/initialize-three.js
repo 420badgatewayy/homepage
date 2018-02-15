@@ -29,6 +29,7 @@ export default (options={}) => {
   const detachScene = domElement => {
     window.removeEventListener('resize', _setRenderSize);
     renderer.domParent.removeChild(renderer.domElement);
+    renderer.domParent = null;
   };
 
   const toolbelt = {

@@ -1,5 +1,5 @@
 import style from "./style.css";
-import { setTimeout } from "timers";
+import create_loop from 'utils/game-loop';
 // import cube_socket from "sockets/cube";
 
 const onCreate = (el, state, actions, three, socket) => {
@@ -14,24 +14,35 @@ const onCreate = (el, state, actions, three, socket) => {
   const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
   const cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
-  const render = () =>{
+
+  const update = () => {  
     cube.rotation.x += 0.005;
-    cube.rotation.y += 0.005;
-    renderer.render(scene, camera);
-    requestAnimationFrame(render);
+    cube.rotation.y += 0.0075;
   }
-  render();
-  socket.open('/cube')
-  socket.on('connection', ()=> console.log('socket connected'));
+
+  const draw = () => {
+    renderer.render(scene, camera);
+  }
+  
+  const loop = create_loop({update, draw});
+  loop();
+
+  window.addEventListener('click', () => {
+    loop.isRunning() ? loop.stop() : loop.run();
+  });
+
+  // socket.open('/cube')
+  // socket.on('connection', ()=> console.log('socket connected'));
+  // socket.on('disconnect', ()=> console.log('socket disconnected'));
 };
 
 export const Cube = ({state, actions, three, socket}) => {
-  setTimeout(actions.$next_stage, 1000)
   return(
-    <div key="cube" 
-      className={style.scene} 
-      oncreate={el => onCreate(el, state, actions, three, socket)}
-      ondestroy={()=> socket.close()}
-    />
+    <div>
+      <div key="cube" 
+        className={style.scene} 
+        oncreate={el => onCreate(el, state, actions, three, socket)}
+      />
+    </div>
   )
 };
