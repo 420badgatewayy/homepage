@@ -10,14 +10,15 @@ const onCreate = (el, state, actions, three, socket) => {
     toolbelt,
   } = three;
   toolbelt.attachScene(el);
+  
   const geometry = new THREE.BoxGeometry(1,1,1)
   const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
   const cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
 
-  const update = () => {  
-    cube.rotation.x += 0.005;
-    cube.rotation.y += 0.0075;
+  const update = deltaTime => {  
+    cube.rotation.x += 0.0005 * deltaTime;
+    cube.rotation.y += 0.00075 * deltaTime;
   }
 
   const draw = () => {
@@ -31,9 +32,9 @@ const onCreate = (el, state, actions, three, socket) => {
     loop.isRunning() ? loop.stop() : loop.run();
   });
 
-  // socket.open('/cube')
-  // socket.on('connection', ()=> console.log('socket connected'));
-  // socket.on('disconnect', ()=> console.log('socket disconnected'));
+  socket.open('/cube')
+  socket.on('connection', ()=> console.log('socket connected'));
+  socket.on('disconnect', ()=> console.log('socket disconnected'));
 };
 
 export const Cube = ({state, actions, three, socket}) => {
