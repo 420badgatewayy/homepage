@@ -3,6 +3,7 @@ import aspect from "constants/aspect";
 const aspectRatio = aspect.x / aspect.y;
 
 export default (options={}) => {
+  const animations = {};
   const renderer = new THREE.WebGLRenderer({antialias: true});
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -19,22 +20,22 @@ export default (options={}) => {
     options.cameraPosition ? options.cameraPosition.z : 4,
   );
 
-  const attachScene = domElement => {
+  function attach(domElement) {
     window.addEventListener('resize', _setRenderSize);
     domElement.appendChild(renderer.domElement);
     renderer.domParent = domElement;
     _setRenderSize();
   };
 
-  const detachScene = domElement => {
+  function detach(domElement) {
     window.removeEventListener('resize', _setRenderSize);
     renderer.domParent.removeChild(renderer.domElement);
     renderer.domParent = null;
   };
 
   const toolbelt = {
-    attachScene,
-    detachScene
+    attach,
+    detach
   };
 
   return {
