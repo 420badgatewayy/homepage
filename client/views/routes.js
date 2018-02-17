@@ -10,19 +10,17 @@ const select = (obj, ...paths) => {
   return {...selected, ...get_state, };
 };
 
-export default (state, actions, three, socket) => {
-  switch(state.global._stage) {
-    case 0: return <Cube
-      state={select(state, "input", "cube")}
-      actions={select(actions, "input", "cube")}
-      three={three}
-      socket={socket}
-      />;
-    case 1: return <Conway
-      state={select(state, "input")}
-      actions={select(actions, "input")}
-      three={three}
-      socket={socket}
-      />;
-  }
+export default (state, actions, three, socket, loop) => {
+  const stages = [
+    Cube, 
+    Conway
+  ]
+  const Stage = stages[state.global._stage];
+  return <Stage
+    state={select(state, "input", "cube")}
+    actions={select(actions, "input", "cube")}
+    three={three}
+    socket={socket}
+    loop={loop}
+    />
 };

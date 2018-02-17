@@ -7,6 +7,10 @@ export default () => {
 
   const getSocket = () => socket;
 
+  const attach = (setup, actions) => {
+    setup.open(socket, state);
+  }
+
   const open = path => {
     socket = io(path);
     socket.open();

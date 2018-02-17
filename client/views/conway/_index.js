@@ -6,7 +6,7 @@ const onCreate = (el, state, actions, three, socket) => {
   socket.on('connection', ()=> console.log('socket connected'));
   socket.on('disconnect', ()=> console.log('socket disconnected'));
 
-  three.toolbelt.attachScene(el);
+  three.toolbelt.attach(el);
 };
 
 export const Conway = ({state, actions, three, socket}) => {

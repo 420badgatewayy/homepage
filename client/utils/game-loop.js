@@ -15,7 +15,7 @@ export default (callbacks={}, options={}) => {
   let prevTime = 0;
   let deltaTime = 0;
 
-  const loop = (time=performance.now()) => {
+  let loop = (time=performance.now()) => {
     animationFrame = requestAnimationFrame(loop);
 
     let updateSteps = 0;

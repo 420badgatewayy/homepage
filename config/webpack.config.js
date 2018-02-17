@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: [path.resolve("client/app.js")]
+    app: ['babel-polyfill', path.resolve("client/app.js")]
   },
   output: {
     publicPath: "/dist/",
