@@ -14,6 +14,5 @@ const onClientDisconnect = client => {
 module.exports = function(path, io) {
   io.of(path).on('connection', (client)=>{
     onClientConnect(client)
-    console.log(io)
   });
 }

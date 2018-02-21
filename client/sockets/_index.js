@@ -5,39 +5,35 @@ export default () => {
     autoConnect: false
   });
 
-  const getSocket = () => socket;
-
-  const attach = (setup, actions) => {
-    setup.open(socket, state);
-  }
-
-  const open = path => {
-    socket = io(path);
-    socket.open();
-  };
-
-  const close = () => {
-    socket.close();
-  };
-
-  const send = (...args) => {
-    socket.send(...args);
-  };
-
-  const emit = (...args) => {
-    socket.emit(...args);
-  };
-
-  const on = (...args) => {
-    socket.on(...args);
-  };
-
   return {
-    getSocket,
-    open,
-    close,
-    send,
-    emit,
-    on,
+    getSocket() {
+      return socket;
+    },
+    
+    open(path) {
+      socket = io(path);
+      socket.open();
+    },
+  
+    close() {
+      socket.close();
+    },
+  
+    send(...args) {
+      socket.send(...args);
+    },
+  
+    emit(...args) {
+      socket.emit(...args);
+    },
+  
+    on(...args) {
+      socket.on(...args);
+    },
+  
+    update(deltaTime) {
+      console.warn('no update method attached to socket');
+      return deltaTime;
+    }
   };
 }

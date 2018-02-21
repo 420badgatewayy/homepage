@@ -17,7 +17,7 @@ export default (options={}) => {
   camera.position.set(
     options.cameraPosition ? options.cameraPosition.x : 0,
     options.cameraPosition ? options.cameraPosition.y : 0,
-    options.cameraPosition ? options.cameraPosition.z : 4,
+    options.cameraPosition ? options.cameraPosition.z : 7,
   );
 
   

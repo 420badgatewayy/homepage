@@ -3,17 +3,15 @@ import cube_animation from "game/animations/cube.js"
 import cube_socket from "sockets/cube";
 
 const onCreate = (el, props) => {
-  const { state, actions, three, socket, loop } = props;
+  const { actions, three, socket, loop } = props;
   const animation = cube_animation(three, actions);
 
   three.toolbelt.addAnimation(animation);
   three.toolbelt.attach(el);
   
-  loop();
+  cube_socket.create(socket, actions);
 
-  socket.open('/cube');
-  socket.on('connection', ()=> console.log('socket connected'));
-  socket.on('disconnect', ()=> console.log('socket disconnected'));
+  loop();
 
   window.addEventListener('keydown', actions.input.keyboard.onKeyDown);
   window.addEventListener('keyup',actions. input.keyboard.onKeyUp);
@@ -21,13 +19,13 @@ const onCreate = (el, props) => {
 };
 
 const onDestroy = (el, props) => {
-  const { state, actions, three, socket, loop } = props;
+  const { actions, three, socket, loop } = props;
   socket.close();
 
   window.removeEventListener('keydown', actions.input.keyboard.onKeyDown)
   window.removeEventListener('keyup', actions.input.keyboard.onKeyUp)
 
-  loop.stop();
+  cube_socket.destroy(socket);
 };
 
 export const Cube = props => {
