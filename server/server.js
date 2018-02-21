@@ -1,4 +1,4 @@
-global.__base = __dirname+"/../";
+global.__base = __dirname+"/";
 const env = require('dotenv');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ const io = require('socket.io')(server);
 const router = require('./routers/_index');
 const attachSockets = require('./sockets/_index');
 
-env.config({path: __base+"config/.env"});
+env.config({path: __base+"../config/.env"});
 env.load();
 
 app.use(morgan("common")); 

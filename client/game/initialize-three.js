@@ -1,8 +1,10 @@
 import sizeToFit from 'utils/size-to-fit';
 import aspect from "constants/aspect";
 const aspectRatio = aspect.x / aspect.y;
+const fn = () => {};
 
 export default (options={}) => {
+  let resize_cb = fn;
   const animations = new Map();
   const renderer = new THREE.WebGLRenderer({antialias: true});
   const scene = new THREE.Scene();
@@ -22,10 +24,11 @@ export default (options={}) => {
 
   
   const toolbelt = {
-    attach(domElement) {
+    attach(domElement, cb) {
       window.addEventListener('resize', _setRenderSize);
       domElement.appendChild(renderer.domElement);
       renderer.domParent = domElement;
+      resize_cb = cb || fn;
       _setRenderSize();
     },
   
@@ -66,7 +69,9 @@ export default (options={}) => {
   function _setRenderSize() {
     const {offsetWidth, offsetHeight} = renderer.domParent;
     const {x, y} = sizeToFit(aspectRatio, offsetWidth, offsetHeight);
+    camera.updateProjectionMatrix();
     renderer.setSize(x,y);
+    resize_cb && resize_cb({x, y});
   };
 
 }

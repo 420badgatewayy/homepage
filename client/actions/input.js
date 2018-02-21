@@ -1,7 +1,8 @@
 export default {
   mouse: {
-    set_position: (pos) => state => ({x:pos.x,y:pos.y}),
-    toggle_click: () => state => !state.clicked
+    onMouseMove: e => state => ({x:e.offsetX,y:e.offsetY}),
+    onMouseDown: () => state => ({clicked: true}),
+    onMouseUp: () => state => ({clicked: false}),
   },
   keyboard: {
     onKeyDown: e => state => {

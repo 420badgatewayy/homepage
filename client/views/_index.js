@@ -15,8 +15,14 @@ const update = deltaTime => {
 
 const loop = create_loop({update, draw});
 
+const temp_onCreate = actions => {
+  window.next = actions.global._next_stage
+  window.three = three;
+  window.get_state = actions.get_state;
+};
+
 export const view = (state, actions) => (
-  <div key="app" id="__app">
+  <div key="app" id="__app" oncreate={()=>temp_onCreate(actions)}>
     {router(state, actions, three, socket, loop)}
   </div>
 );

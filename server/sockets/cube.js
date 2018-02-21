@@ -1,4 +1,17 @@
-const state = {
+const Client = require(__base+"games/cube/client");
+
+const get_initial_state = () => ({
+  mouse: {
+    clicked: false,
+    x: 0,
+    y: 0,
+  },
+
+  scene: {
+    x: 0,
+    y: 0,
+  },
+
   position: {
     x: 0,
     y: 0,
@@ -10,22 +23,16 @@ const state = {
     y: 0,
     z: 0
   }
-}
+});
 
-const onClientConnect = client => {
+function onClientConnect(socket) {
   console.log('client connected');
-  client.emit('connection', state);
+  const client = new Client(socket);
 
-  client.on('input', data => {
-    if(data.keys.ArrowRight) state.position.x += data.deltaTime * .001;
-    if(data.keys.ArrowLeft)  state.position.x -= data.deltaTime * .001;
-    if(data.keys.ArrowUp)    state.position.y += data.deltaTime * .001;
-    if(data.keys.ArrowDown) state.position.y -= data.deltaTime * .001;
-    client.emit('state_change', state);
-  });
-
-  
-  client.on('disconnect', onClientDisconnect);
+  socket.emit('connection', client.state);
+  socket.on('resize', data=>client.setSize(data));
+  socket.on('input', data => client.handleInput(data));
+  socket.on('disconnect', () => onClientDisconnect(socket));
 }
 
 const onClientDisconnect = client => {
